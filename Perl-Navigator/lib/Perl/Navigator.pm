@@ -5,6 +5,8 @@ use strict;
 use attributes;
 no warnings; 
 
+our $VERSION = '3.000';
+
 my @preloaded; # Check what's loaded before we pollute the namespace
 
 my @checkPreloaded = qw(List::Util File::Spec Sub::Util Cwd Scalar::Util );

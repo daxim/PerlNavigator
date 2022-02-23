@@ -2,6 +2,8 @@ package Perl::Navigator::SourceStash;
 use strict;
 use Filter::Simple;
 
+our $VERSION = '3.000';
+
 our $source = '';
 our $filename;
 

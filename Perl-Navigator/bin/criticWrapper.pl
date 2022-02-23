@@ -7,6 +7,8 @@ use utf8;
 use Unicode::Normalize qw(NFKD);
 use open qw(:std :utf8);
 
+our $VERSION = '3.000';
+
 my $sSource = do { local $/; <STDIN> };
 
 if ( !eval{ require PPI; require Perl::Critic; 1} ){

@@ -8,7 +8,7 @@ no warnings; # BScan note: Avoiding sub redefined and similar issues
 use File::Spec ();
 
 # ABSTRACT: Get information about a class and its structure
-our $VERSION = '1.36'; # VERSION
+our $VERSION = '3.000'; # VERSION
 
 
 # If Unicode is available, enable it so that the
@@ -410,7 +410,7 @@ Class::Inspector - Get information about a class and its structure
 
 =head1 VERSION
 
-version 1.36
+version 3.000
 
 =head1 SYNOPSIS
 

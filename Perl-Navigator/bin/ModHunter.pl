@@ -1,6 +1,8 @@
 use strict;
 use File::Find;
 
+our $VERSION = '3.000';
+
 sub get_modules {
     # Clean up @INC
     my @dirs;

@@ -11,7 +11,7 @@ use base qw(Perl::Navigator::Class::Inspector);
 use vars qw{$VERSION $RE_IDENTIFIER $RE_CLASS $UNIX $BIDENTIFY};
 
 BEGIN {
-    $VERSION = '1.28';
+    $VERSION = '3.000';
 
     SCOPE: {
         local $@;

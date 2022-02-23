@@ -18,7 +18,7 @@ our @ISA    = qw(Exporter);
 our @EXPORT_OK = qw(build_pltags);
 
 # Global variables
-my $VERSION = "2.4";    # pltags version
+our $VERSION = '3.000';    # pltags version
 
 # Create a tag file line and push it on the list of found tags
 sub MakeTag {

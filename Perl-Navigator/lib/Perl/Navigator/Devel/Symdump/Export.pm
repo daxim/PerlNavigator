@@ -3,7 +3,9 @@ require Perl::Navigator::Devel::Symdump;
 require Exporter;
 use Carp;
 use strict;
-use vars qw(@ISA @EXPORT_OK $AUTOLOAD);
+use vars qw($VERSION @ISA @EXPORT_OK $AUTOLOAD);
+
+$VERSION = '3.000';
 @ISA=('Exporter');
  
 @EXPORT_OK=(

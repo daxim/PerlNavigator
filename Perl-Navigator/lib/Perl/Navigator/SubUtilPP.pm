@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use B;
 
+our $VERSION = '3.000';
+
 if ( !eval { require Sub::Util; Sub::Util->import('subname'); 1 } ){
     *subname = sub {
         my ($coderef) = @_;
