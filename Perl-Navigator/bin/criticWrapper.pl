@@ -51,7 +51,8 @@ foreach my $viol (@violations){
 
 sub AsciiReplacementChar {
     # Tries to find ascii replacements for non-ascii characters.
-    # Usually a horrible solution, but Perl::Critic otherwise crashes on unicode data
+    # Usually a horrible solution, but PPI otherwise crashes on unicode data
+    # <https://github.com/Perl-Critic/PPI/issues/22>
 
     my ( $sChar ) = @_;
     my $sSanitized= NFKD($sChar);

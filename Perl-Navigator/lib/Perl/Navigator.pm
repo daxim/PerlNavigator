@@ -367,3 +367,91 @@ sub tags_to_symbols {
 
 1;
 
+__END__
+
+=encoding UTF-8
+
+=head1 NAME
+
+Perl::Navigator - source code analysis supplying Language Server Protocol features
+
+=head1 SYNOPSIS
+
+    $ perl -c -MPerl::Navigator t/testWorkspace/MyLib/ObjectTiny.pm
+    Running inquisitor
+    @_      c                                       main
+    @INC    c                                       ...
+    %ENV    h
+    %SIG    h
+    $!      c
+    $"      c                                        
+    $]      c                                       5.034000
+    $@      c
+    $0      c                                       t/testWorkspace/MyLib/ObjectTiny.pm
+    bytes   m               .../bytes.pm  bytes   0
+    bytes::AUTOLOAD t       bytes::AUTOLOAD .../bytes.pm  bytes   18
+    bytes::import   t       bytes::import   .../bytes.pm  bytes   9
+    bytes::unimport t       bytes::unimport .../bytes.pm  bytes   13
+    Encode  m               .../Encode.pm  Encode  0
+    ⋮
+    Encode::decode  t       Encode::decode          Encode
+    ⋮
+    File::Basename  m               .../File/Basename.pm  File::Basename  0
+    File::Basename::_strip_trailing_sep     t       File::Basename::_strip_trailing_sep     .../File/Basename.pm File::Basename   330
+    File::Basename::basename        t       File::Basename::basename        .../File/Basename.pm  File::Basename 213
+    File::Basename::dirname t       File::Basename::dirname .../File/Basename.pm  File::Basename  282
+    File::Basename::fileparse       t       File::Basename::fileparse       .../File/Basename.pm  File::Basename 103
+    File::Basename::fileparse_set_fstype    t       File::Basename::fileparse_set_fstype    .../File/Basename.pm File::Basename   375
+    MyLib::ObjectTiny::bar  t       MyLib::ObjectTiny::bar          MyLib::ObjectTiny       1
+    MyLib::ObjectTiny::baz  t       MyLib::ObjectTiny::baz          MyLib::ObjectTiny       2
+    MyLib::ObjectTiny::import       t       Object::Tiny::import    .../Object/Tiny.pm  Object::Tiny   6
+    MyLib::ObjectTiny::new  t       Object::Tiny::new       .../Object/Tiny.pm  Object::Tiny    22
+    Object::Tiny    m               .../Object/Tiny.pm  Object::Tiny    0
+    Object::Tiny::import    t       Object::Tiny::import    .../Object/Tiny.pm  Object::Tiny    6
+    Object::Tiny::new       t       Object::Tiny::new       .../Object/Tiny.pm  Object::Tiny    22
+    parent  m               .../parent.pm parent  0
+    parent::import  t       parent::import  .../parent.pm parent  5
+    Storable        m               .../Storable.pm        Storable       0
+    ⋮
+    Storable::store t       Storable::store .../Storable.pm        Storable 227
+    ⋮
+    
+    --------------Now Building the new pltags ---------------------
+    MyLib::ObjectTiny       p                       MyLib::ObjectTiny       0;6
+    strict  u                       MyLib::ObjectTiny       1
+    warnings        u                       MyLib::ObjectTiny       2
+    Object::Tiny    u                       MyLib::ObjectTiny       4
+    Done with pltags. Now dumping same-file packages
+    bar     t                       MyLib::ObjectTiny       1
+    @ISA    c                                       Object::Tiny
+    baz     t                       MyLib::ObjectTiny       2
+    bar     i                       MyLib::ObjectTiny       1
+    baz     i                       MyLib::ObjectTiny       2
+    import  i       Object::Tiny::import    .../Object/Tiny.pm  Object::Tiny    6
+    new     i       Object::Tiny::new       .../Object/Tiny.pm  Object::Tiny    22
+    MyLib::ObjectTiny       2       Object::Tiny
+    t/testWorkspace/MyLib/ObjectTiny.pm syntax OK
+
+=head1 DESCRIPTION
+
+Running Perl::Navigator analyses a source file during the compilation phase,
+see L<perlrun/-c> the C<CHECK> global phase in L<perlmod>. This happens in the
+same process in two ways: symbol table inspection and regex tagging. Generally,
+the symbol table provides the information about all the dependencies, and the
+regex based tagging (pltags.pm) provides the content about the current file
+itself.
+
+The output format is similar to L<http://enwp.org/ctags#Tags_file_formats>.
+Each line is a tag containing a symbol, some metadata, and the location it is
+defined (line number and filename). The output format is read by the JavaScript
+portion of the PerlNavigator Language Server handler and a consuming client
+(IDE) then displays them for the outline, navigation, autocomplete, and hover.
+
+See F<server/src/types.ts>, C<enum PerlSymbolKind> for the meaning of the
+single letter abbreviations.
+
+=head1 SEE ALSO
+
+other Perl parsers: L<PPI>, L<Compiler::Parser>
+
+other Language Server Protocol implementations: L<Perl::LanguageServer>, L<PLS>
