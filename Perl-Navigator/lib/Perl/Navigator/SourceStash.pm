@@ -1,4 +1,4 @@
-package lib_bs22::SourceStash;
+package Perl::Navigator::SourceStash;
 use strict;
 use Filter::Simple;
 
@@ -15,8 +15,8 @@ SourceStash.pm
 =head1 SYNOPSIS
 I don't love this module, but it performs a needed task.
 The Perl Navigator is passing Perl source code directly into perl via stdin for compilation, and I would like to inspect that code later in the same process.
-When loaded, this simply stores the source in the variable $lib_bs22::SourceStash::source.
-The other dependencies don't have lib_bs22 as prefix, but SourceStash is loaded before main script compiles, and I don't want to mess with their include path until after.
+When loaded, this simply stores the source in the variable $Perl::Navigator::SourceStash::source.
+The other dependencies don't have Perl::Navigator as prefix, but SourceStash is loaded before main script compiles, and I don't want to mess with their include path until after.
 
 I think there's a bug in FILTER::SIMPLE that drops the __END__ line, but keeps comments after it. Without the __END__ line, I can't remove it later;
 the 0 stops this behaviour and I can remove it manually later

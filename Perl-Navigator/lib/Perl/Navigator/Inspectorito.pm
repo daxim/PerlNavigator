@@ -1,4 +1,4 @@
-package Inspectorito;
+package Perl::Navigator::Inspectorito;
 # The Inspectorito, or "Little Inspector" is a subclass of Class::Inspector built for the perl navigator
 # It overrides ->methods to only specify locally defined methods. Normally, all imported functions become methods on a class which pollutes the namespace.
 # For example, if an object $foo uses the Data::Dumper internally, you can $foo->Dumper() on that object despite it not making any sense. 
@@ -7,7 +7,7 @@ use 5.006;
 use strict qw{vars subs};
 use warnings;
 use File::Spec ();
-use base qw(Class::Inspector);
+use base qw(Perl::Navigator::Class::Inspector);
 use vars qw{$VERSION $RE_IDENTIFIER $RE_CLASS $UNIX $BIDENTIFY};
 
 BEGIN {
@@ -25,7 +25,7 @@ BEGIN {
     # Are we on something Unix-like?
     $UNIX  = !! ( $File::Spec::ISA[0] eq 'File::Spec::Unix'  );
 
-    require SubUtilPP;
+    require Perl::Navigator::SubUtilPP;
 }
 
 
@@ -65,7 +65,7 @@ sub local_methods {
         
         foreach my $func ( @functions ) {
             if (my $codeRef = $namespace->can($func)) {
-                my $source = SubUtilPP::subname( $codeRef );
+                my $source = Perl::Navigator::SubUtilPP::subname( $codeRef );
                 my $pack = $1 if($source =~ m/^(.+)::.*?$/);
                 next unless defined($pack) and $namespace eq $pack;
             } else {

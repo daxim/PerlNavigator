@@ -1,4 +1,4 @@
-package Inquisitor;
+package Perl::Navigator;
 
 # be careful around importing anything since we don't want to pollute the users namespace
 use strict;
@@ -56,13 +56,13 @@ sub load_dependencies {
     require File::Spec;
     require B;
     require Encode;
-    my $module_dir = File::Spec->catfile( File::Basename::dirname(__FILE__), 'lib_bs22');
+    my $module_dir = File::Spec->catfile( File::Basename::dirname(__FILE__), 'lib');
     unshift @INC, $module_dir; 
    
     # Sub::Util was added to core in 5.22. The real version can find module names of C code (e.g. List::Util). The fallback can still trace Pure Perl functions
-    require SubUtilPP; 
-    require Inspectorito;
-    require Devel::Symdump;
+    require Perl::Navigator::SubUtilPP;
+    require Perl::Navigator::Inspectorito;
+    require Perl::Navigator::Devel::Symdump;
 }
 
 sub load_test_file {
@@ -96,7 +96,7 @@ sub maybe_print_sub_info {
         
         my $pack = $UNKNOWN;
         my $subname = $UNKNOWN;
-        $subname = SubUtilPP::subname($codeRef);
+        $subname = Perl::Navigator::SubUtilPP::subname($codeRef);
         $pack = $1 if($subname =~ m/^(.+)::.*?$/);
 
         # Subname is a fully qualified name. If it's the normal name, just ignore it.
@@ -164,12 +164,12 @@ sub print_tag {
 }
 
 sub run_pltags {
-    require pltags;
+    require Perl::Navigator::pltags;
     my $sourceFilePath = shift;
-    my ($source, $offset, $file) = load_source($sourceFilePath);
+    my ($source, $offset, $file) = load_source();
 
     print "\n--------------Now Building the new pltags ---------------------\n";
-    my ($tags, $packages) = pltags::build_pltags($source, $offset, $file); # $0 should be the script getting compiled, not this module
+    my ($tags, $packages) = Perl::Navigator::pltags::build_pltags($source, $offset, $file); # $0 should be the script getting compiled, not this module
     foreach my $newTag (@$tags){
         print $newTag . "\n";
     }
@@ -206,7 +206,7 @@ sub dump_vars_to_main {
 sub dump_inherited_to_main {
     my ($package) = @_;
 
-    my $methods = Inspectorito->local_methods( $package );
+    my $methods = Perl::Navigator::Inspectorito->local_methods( $package );
     foreach my $name (@$methods){
         next if $name =~ /^(F_|O_|L_)/; # The unhelpful C compiled things
         if (my $codeRef = $package->can($name)) {
@@ -240,7 +240,7 @@ sub dump_subs_from_packages {
     INSPECTOR: foreach my $mod (@$modpacks){
         my $pkgCount = 0;
         next INSPECTOR if($mod =~ $baseRegex and $baseCount{$1} > $nameSpaceLimit);
-        my $methods = Inspectorito->local_methods( $mod );
+        my $methods = Perl::Navigator::Inspectorito->local_methods( $mod );
         next INSPECTOR if !defined($methods);
         #my $methods = ClassInspector->functions( $mod ); # Less memory, but less accurate?
 
@@ -273,7 +273,7 @@ sub filter_modpacks {
     # Some of these things I've imported in here, some are just piles of C code.
     # We'll still nav to modules and find anything explictly imported so we can be aggressive at removing these. 
     my @to_remove = ("Cwd", "B", "main","version","POSIX","Fcntl","Errno","Socket", "DynaLoader","CORE","utf8","UNIVERSAL","PerlIO","re","Internals","strict","mro","Regexp",
-                      "Exporter","Inquisitor", "XSLoader","attributes", "warnings","strict","utf8", "constant","XSLoader", "Carp",
+                      "Exporter","Perl::Navigator", "XSLoader","attributes", "warnings","strict","utf8", "constant","XSLoader", "Carp",
                       "base", "Config", "overloading", "Devel::Symdump", "vars", "Tie::Hash::NamedCapture", "Text::Balanced", "Filter::Util::Call", "IO::Poll", "IO::Seekable", "IO::Handle", 
                        "IO::File", "Symbol", "IO", "SelectSaver", "overload", "Filter::Simple", "SelfLoader", "PerlIO::Layer", "Text::Balanced::Extractor", "IO::Socket", @checkPreloaded);
 
@@ -281,7 +281,7 @@ sub filter_modpacks {
     my %filter = map { $_ => 1 } @to_remove;
 
     # Exporter:: should remove Heavy and Tiny,  Moose::Meta is removed just because it drops more than 1500 things and I don't care about any of them
-    my $filter_regex = qr/^(File::Spec::|warnings::register|lib_bs22::|Exporter::|Moose::Meta::|Class::MOP::|B::|Config::)/; # TODO: Allow keeping some of these
+    my $filter_regex = qr/^(File::Spec::|warnings::register|Perl::Navigator::|Exporter::|Moose::Meta::|Class::MOP::|B::|Config::)/; # TODO: Allow keeping some of these
     my $private = qr/::_\w+/;
 
     foreach (@preloaded) { $filter{$_} = 0 }; 
@@ -297,8 +297,8 @@ sub dump_loaded_mods {
         my $display_mod = $module;
         $display_mod =~ s/[\/\\]/::/g;
         $display_mod =~ s/(?:\.pm|\.pl)$//g;
-        next if $display_mod =~ /lib_bs22::|^(Inquisitor|B)$/;
-        next if !Inspectorito->loaded($display_mod);
+        next if $display_mod =~ /Perl::Navigator::|^B$/;
+        next if !Perl::Navigator::Inspectorito->loaded($display_mod);
         $displays->{$display_mod} = $INC{$module};
     }
 
@@ -312,7 +312,7 @@ sub dump_loaded_mods {
 }
 
 sub get_all_packages {
-    my $obj = Devel::Symdump->rnew();
+    my $obj = Perl::Navigator::Devel::Symdump->rnew();
     my @allPackages = $obj->packages;
     return \@allPackages;
 }
@@ -328,10 +328,10 @@ sub load_source {
         $source = do { local $/; <$fh> };
         $offset = 1;
         close($fh);
-    } elsif ($INC{"lib_bs22/SourceStash.pm"}){
+    } elsif ($INC{"Perl/Navigator/SourceStash.pm"}){
         # Path run during the extension
-        $source = $lib_bs22::SourceStash::source;
-        $file = $lib_bs22::SourceStash::filename;
+        $source = $Perl::Navigator::SourceStash::source;
+        $file = $Perl::Navigator::SourceStash::filename;
         $source = Encode::decode('utf-8', $source);
         $offset = 3;
     } else{

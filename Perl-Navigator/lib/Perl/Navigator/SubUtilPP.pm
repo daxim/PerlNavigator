@@ -1,4 +1,4 @@
-package SubUtilPP;
+package Perl::Navigator::SubUtilPP;
 
 use strict;
 use warnings;
@@ -18,3 +18,5 @@ if ( !eval { require Sub::Util; Sub::Util->import('subname'); 1 } ){
 
 1;
 # This is to provide a pure perl fallback to Sub::Util for old versions of Perl. It's essentially just Sub::Identify.
+
+# (c) Rafael Garcia-Suarez (rgs at consttype dot org) 2005, 2008, 2012, 2014, 2015

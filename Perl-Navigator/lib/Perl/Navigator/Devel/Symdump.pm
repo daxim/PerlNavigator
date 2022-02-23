@@ -1,4 +1,4 @@
-package Devel::Symdump;
+package Perl::Navigator::Devel::Symdump;
 
 use 5.003;
 use Carp ();
@@ -75,7 +75,7 @@ sub _symdump {
                 ($p .= $key) =~ s/::$//;
                 $result->{$pack}{PACKAGES}{$p}++;
                 $gotone++;
-                if (++$self->{SEEN}{*$val} > $Devel::Symdump::MAX_RECURSION){
+                if (++$self->{SEEN}{*$val} > $Perl::Navigator::Devel::Symdump::MAX_RECURSION){
                     next;
                 }
 		push @todo, $p;
@@ -192,7 +192,7 @@ sub inh_tree {
     return $self->{INHTREE} if ref $self && defined $self->{INHTREE};
     my($inherited_by) = {};
     my($m)="";
-    my(@isa) = grep /\bISA$/, Devel::Symdump->rnew->arrays;
+    my(@isa) = grep /\bISA$/, Perl::Navigator::Devel::Symdump->rnew->arrays;
     my $isa;
     foreach $isa (sort @isa) {
 	$isa =~ s/::ISA$//;
@@ -234,7 +234,7 @@ sub _inh_tree {
 sub isa_tree{
     my($self) = @_;
     return $self->{ISATREE} if ref $self && defined $self->{ISATREE};
-    my(@isa) = grep /\bISA$/, Devel::Symdump->rnew->arrays;
+    my(@isa) = grep /\bISA$/, Perl::Navigator::Devel::Symdump->rnew->arrays;
     my($m) = "";
     my($isa);
     foreach $isa (sort @isa) {

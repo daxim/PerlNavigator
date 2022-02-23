@@ -1,4 +1,4 @@
-package Class::Inspector;
+package Perl::Navigator::Class::Inspector;
 
 use 5.006;
 # We don't want to use strict refs anywhere in this module, since we do a

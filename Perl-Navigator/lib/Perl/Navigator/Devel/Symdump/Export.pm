@@ -1,5 +1,5 @@
-package Devel::Symdump::Export;
-require Devel::Symdump;
+package Perl::Navigator::Devel::Symdump::Export;
+require Perl::Navigator::Devel::Symdump;
 require Exporter;
 use Carp;
 use strict;
@@ -25,14 +25,14 @@ push @EXPORT_OK, "symdump";
 # undocumented feature symdump() -- does it save enough typing?
 sub symdump {
     my @packages = @_;
-    Devel::Symdump->new(@packages)->as_string;
+    Perl::Navigator::Devel::Symdump->new(@packages)->as_string;
 }
  
 AUTOLOAD {
     my @packages = @_;
     (my $auto = $AUTOLOAD) =~ s/.*:://;
     confess("Unknown function call $auto") unless $OK{$auto};
-    my @ret = Devel::Symdump->new->$auto(@packages);
+    my @ret = Perl::Navigator::Devel::Symdump->new->$auto(@packages);
     return @ret;
 }
  
