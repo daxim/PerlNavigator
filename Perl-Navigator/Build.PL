@@ -49,9 +49,11 @@ Module::Build->new(
         )
     },
     test_requires => {
+        'List::Util' => '1.33',
         map { $_ => 0 } qw(
             attributes
             base
+            Capture::Tiny
             Class::Accessor
             Class::Tiny
             constant
@@ -67,8 +69,10 @@ Module::Build->new(
             Object::Pad
             Object::Tiny
             strict
+            Test::More
             utf8
             warnings
+            YAML::Any
         )
     },
 )->create_build_script;
