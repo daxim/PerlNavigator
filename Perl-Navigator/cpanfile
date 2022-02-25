@@ -1,0 +1,63 @@
+configure_requires 'Module::Build' => '0.4004'; # test_requires
+configure_requires 'Module::Build::Pluggable::CPANfile';
+
+# be meticulous about recording core modules
+# because old Perls are supported
+requires 'attributes';
+requires 'B';
+requires 'base';
+requires 'Carp';
+requires 'Config';
+requires 'constant';
+requires 'Exporter';
+requires 'File::Find';
+requires 'File::Spec';
+requires 'Filter::Simple';
+requires 'Getopt::Long';
+requires 'open';
+requires 'strict';
+requires 'Text::Balanced';
+requires 'Unicode::Normalize';
+requires 'utf8';
+requires 'vars';
+requires 'warnings';
+
+test_requires 'attributes';
+test_requires 'base';
+test_requires 'Capture::Tiny';
+test_requires 'Class::Accessor';
+test_requires 'Class::Tiny';
+test_requires 'constant';
+test_requires 'Cwd';
+test_requires 'Data::Dumper';
+test_requires 'experimental';
+test_requires 'Exporter';
+test_requires 'File::Spec';
+test_requires 'FindBin';
+test_requires 'List::Util' => '1.33';
+test_requires 'MIME::Base64';
+test_requires 'Moo';
+test_requires 'Moose';
+test_requires 'Object::Pad';
+test_requires 'Object::Tiny';
+test_requires 'strict';
+test_requires 'Test::More';
+test_requires 'utf8';
+test_requires 'warnings';
+test_requires 'YAML::Any';
+
+# ./Build vendor
+author_requires 'App::cpanminus';
+author_requires 'App::FatPacker';
+author_requires 'Cwd';
+author_requires 'Distribution::Metadata';
+author_requires 'ExtUtils::Packlist';
+author_requires 'lib';
+author_requires 'Module::CPANfile';
+author_requires 'Path::Tiny';
+author_requires 'version';
+
+on 'vendor' => sub {
+    requires 'Devel::Symdump';
+    requires 'Perl::Critic';
+};

@@ -64,7 +64,7 @@ sub load_dependencies {
     # Sub::Util was added to core in 5.22. The real version can find module names of C code (e.g. List::Util). The fallback can still trace Pure Perl functions
     require Perl::Navigator::SubUtilPP;
     require Perl::Navigator::Inspectorito;
-    require Perl::Navigator::Devel::Symdump;
+    require Devel::Symdump;
 }
 
 sub load_test_file {
@@ -314,7 +314,7 @@ sub dump_loaded_mods {
 }
 
 sub get_all_packages {
-    my $obj = Perl::Navigator::Devel::Symdump->rnew();
+    my $obj = Devel::Symdump->rnew();
     my @allPackages = $obj->packages;
     return \@allPackages;
 }

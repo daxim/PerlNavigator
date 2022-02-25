@@ -64,14 +64,15 @@ export async function perlcompile(textDocument: TextDocument, workspaceFolders: 
 }
 
 function getInquisitor(): string[]{
-    const inq_path = join(dirname(__dirname), 'src', 'perl');
-    let inq: string[] = ['-I', inq_path, '-MInquisitor'];
+    const inq_path = join(dirname(__dirname), '..', 'Perl-Navigator', 'lib');
+    const vendor_path = join(dirname(__dirname), '..', 'Perl-Navigator', 'vendor', 'lib');
+    let inq: string[] = ['-I', inq_path, '-I', vendor_path, '-MPerl::Navigator'];
     return inq;
 }
 
 function getAdjustedPerlCode(textDocument: TextDocument, filePath: string): string {
     let code = textDocument.getText();
-    code = `local \$0; use lib_bs22::SourceStash; BEGIN { \$0 = '${filePath}'; if (\$INC{'FindBin.pm'}) { FindBin->again(); }; \$lib_bs22::SourceStash::filename = '${filePath}'; print "Setting file" . __FILE__; }\n# line 0 \"${filePath}\"\ndie('Not needed, but die for safety');\n` + code;
+    code = `local \$0; use Perl::Navigator::SourceStash; BEGIN { \$0 = '${filePath}'; if (\$INC{'FindBin.pm'}) { FindBin->again(); }; \$Perl::Navigator::SourceStash::filename = '${filePath}'; print "Setting file" . __FILE__; }\n# line 0 \"${filePath}\"\ndie('Not needed, but die for safety');\n` + code;
     return code;
 }
 
@@ -135,9 +136,11 @@ function localizeErrors (violation: string, filePath: string, perlDoc: PerlDocum
 
 export async function perlcritic(textDocument: TextDocument, workspaceFolders: WorkspaceFolder[] | null, settings: NavigatorSettings): Promise<Diagnostic[]> {
     if(!settings.perlcriticEnabled) return []; 
-    const critic_path = join(dirname(__dirname), 'src', 'perl', 'criticWrapper.pl');
+    const critic_path = join(dirname(__dirname), '..', 'Perl-Navigator', 'bin', 'criticWrapper.pl');
+    const vendor_path = join(dirname(__dirname), '..', 'Perl-Navigator', 'vendor', 'lib');
     let criticParams: string[] = [critic_path].concat(getCriticProfile(workspaceFolders, settings));
     criticParams = criticParams.concat(['--file', Uri.parse(textDocument.uri).fsPath]);
+    criticParams = ['-I', vendor_path].concat(criticParams);
 
     nLog("Now starting perlcritic with: " + criticParams.join(" "), settings);
     const code = textDocument.getText();

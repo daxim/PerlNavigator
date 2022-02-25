@@ -88,7 +88,7 @@ export async function getAvailableMods(workspaceFolders: WorkspaceFolder[] | nul
        
     let perlParams: string[] = [];
     perlParams = perlParams.concat(getIncPaths(workspaceFolders, settings));
-    const modHunterPath = join(dirname(__dirname), 'src', 'perl', 'lib_bs22', 'ModHunter.pl');
+    const modHunterPath = join(dirname(__dirname), '..', 'Perl-Navigator', 'bin', 'ModHunter.pl');
     perlParams.push(modHunterPath);
     nLog("Starting to look for perl modules with " + perlParams.join(" "), settings);
 

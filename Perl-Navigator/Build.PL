@@ -1,9 +1,8 @@
-use Module::Build 0.4004; # test_requires
-Module::Build->new(
-    add_to_cleanup => ['Perl-Navigator-*'],
-    configure_requires => {
-        'Module::Build' => '0.4004',
-    },
+use lib 'inc';
+use Module::Build::Pluggable qw(CPANfile Vendor);
+
+Module::Build::Pluggable->new(
+    add_to_cleanup => [qw(Perl-Navigator-* extlib vendor)],
     dist_author => 'bscan <invalid@example.org>',
     dist_version_from => 'lib/Perl/Navigator.pm',
     license => 'unknown',   # combined work: MIT for most files,
@@ -21,58 +20,4 @@ Module::Build->new(
         },
     },
     module_name => 'Perl::Navigator',
-    recommends => {
-        map { $_ => 0 } qw(
-            Perl::Critic
-        )
-    },
-    requires => {
-        map { $_ => 0 } qw(
-            attributes
-            B
-            base
-            Carp
-            Config
-            constant
-            Exporter
-            File::Find
-            File::Spec
-            Filter::Simple
-            Getopt::Long
-            open
-            strict
-            Text::Balanced
-            Unicode::Normalize
-            utf8
-            vars
-            warnings
-        )
-    },
-    test_requires => {
-        'List::Util' => '1.33',
-        map { $_ => 0 } qw(
-            attributes
-            base
-            Capture::Tiny
-            Class::Accessor
-            Class::Tiny
-            constant
-            Cwd
-            Data::Dumper
-            experimental
-            Exporter
-            File::Spec
-            FindBin
-            MIME::Base64
-            Moo
-            Moose
-            Object::Pad
-            Object::Tiny
-            strict
-            Test::More
-            utf8
-            warnings
-            YAML::Any
-        )
-    },
 )->create_build_script;
