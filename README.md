@@ -85,6 +85,16 @@ Emacs requires lsp-mode. You can use something similar to the following configur
 :server-id 'perl-ls))
 ```
 
+## Packaging
+
+This is relevant for maintainers only. To build the extension `perlnavigator-*.vsix`:
+
+* clone the repo
+* `npm install`
+* set up a Perl environment amenable to installing modules: [perlbrew](https://perlbrew.pl/) or similar is fine, a system Perl should work too provided the usual headers and development files exist; `local::lib` is untested
+* set up cpanminus: `perlbrew install-cpanm` or `cpan App::cpanminus` or get a copy from [cpanmin.us](https://cpanmin.us)
+* `npm run vsix`
+
 ## Licenses / Acknowledgments
 The Perl Navigator is free software licensed under the MIT License. It has a number of bundled dependencies as well, all of which have their respective open source licenses and copyright attributions included.
 This work is only possible due to Class::Inspector, Devel::Symdump, Perl::Critic, PPI, Sub::Util, Perl itself, Microsoft LSP libraries, and ideas from Perl::LanguageServer and PLS.

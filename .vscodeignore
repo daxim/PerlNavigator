@@ -1,0 +1,8 @@
+**
+!{LICENSE,package.json,README.md}
+!client/{node_modules,out}
+!images
+!node_modules
+!server/{node_modules,out}
+!server/src/perl
+!Perl-Navigator/{bin,lib,vendor}

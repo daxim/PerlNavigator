@@ -153,7 +153,8 @@
 		"compile": "tsc -b",
 		"watch": "tsc -b -w",
 		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
-		"test": "sh ./scripts/e2e.sh"
+		"test": "sh ./scripts/e2e.sh",
+		"vsix": "cd Perl-Navigator && cpanm -n -q --installdeps --with-configure --with-develop . && perl Build.PL && ./Build vendor && cd .. && vsce package"
 	},
 	"devDependencies": {
 		"@types/mocha": "^8.2.2",
@@ -162,6 +163,7 @@
 		"@typescript-eslint/parser": "^4.23.0",
 		"eslint": "^7.26.0",
 		"mocha": "^8.3.2",
-		"typescript": "^4.2.3"
+		"typescript": "^4.2.3",
+		"vsce": "^2.6.7"
 	}
 }
